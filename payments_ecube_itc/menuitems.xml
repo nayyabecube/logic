@@ -1,0 +1,15 @@
+<?xml version="1.0"?> 
+<openerp> 
+  <data>
+    <!-- Hide Menu Item for Payments in Accounting/Sales -->
+    <record model="ir.ui.menu" id="account.menu_action_account_payments_receivable">
+        <field name="action" eval="False"/>
+    </record>
+
+    <!-- Hide Menu Item for Payments in Accounting/Purchases -->
+    <record model="ir.ui.menu" id="account.menu_action_account_payments_payable">
+        <field name="action" eval="False"/>
+    </record>
+
+  </data>
+</openerp> 

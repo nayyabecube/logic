@@ -1,0 +1,65 @@
+$(function() {
+	  
+	$.getJSON('/page/dashboardbar', {}, function(result) {
+		
+		$.each(result, function(index, value) {
+			var data_result = [];
+			$.each(value[1], function(i, val) {
+				if (val.date) {
+				
+				var val = {
+					period : val.date,
+					mesure : val.mesure,
+				};
+				data_result.push(val);
+				}
+			});
+			MorisIndex = value[0];
+			console.log('morris-bar-chart' + MorisIndex.toString());
+
+			Morris.Bar({
+				element : 'morris-bar-chart' + MorisIndex.toString(),
+				data : data_result,
+				xkey : 'period',
+				ykeys : [ 'mesure' ],
+				labels : [ 'Mesure' ],
+				barRatio : 0.4,
+				xLabelAngle : 35,
+				hideHover : 'auto',
+				resize : true
+			});
+		});
+	});
+
+	$.getJSON('/page/dashboard', {}, function(result) {
+		
+		$.each(result, function(index, value) {
+			var data_result = [];
+			$.each(value[1], function(i, val) {
+				if (val.date) {
+					
+					var val = {
+						period : val.date,
+						sale : val.sale,
+					};
+					data_result.push(val);
+				}
+
+			});
+			MorisIndex = value[0];
+			Morris.Area({
+				element : 'morris-area-chart' + MorisIndex.toString(),
+
+				data : data_result,
+				xkey : 'period',
+				ykeys : [ 'sale' ],
+				labels : [ 'Sale' ],
+				pointSize : 2,
+				hideHover : 'auto',
+				resize : true
+
+			});
+		});
+		
+	});
+});

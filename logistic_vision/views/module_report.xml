@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <data>
+
+        <template id="logistic_invoice">
+
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <t t-foreach="docs" t-as="o">
+
+                        <div class="page">
+                            <style>
+                                .main-data {
+                                width: 100%;
+                                }
+                                .center-data {
+                                width: 1150px;
+                                margin: 0px auto;
+                                font-size: 14px;
+                                }
+                                .logistic {
+                                width: 35%;
+                                float: right;
+                                }
+
+                                .solid {
+                                font-weight: bold;
+                                margin-left: 0px;
+                                }
+                                .liquid {
+                                margin-left: 3px;
+                                }
+                                .clearfloat {
+                                clear: both;
+                                float: none;
+                                }
+                                table, td, th {
+                                border: 1px solid;
+                                border-collapse: collapse;
+                                padding: 8px;
+                                text-align: left;
+                                margin: 10px 0px 0px 0px;
+                                padding-left: 15px;
+                                }
+
+                                table tr th.space1,
+                                table tr td.space1 {
+                                    min-width: 100px;
+                                    max-width: 100px;
+                                    width: 100px;
+                                }
+
+                                table tr th.space2,
+                                table tr td.space2 {
+                                    min-width: 220px;
+                                    max-width: 220px;
+                                    width: 220px;
+                                }
+
+                                table tr th.space3,
+                                table tr td.space3 {
+                                    min-width: 300px;
+                                    max-width: 300px;
+                                    width: 300px;
+                                }
+
+                                .no-margin {
+                                margin-top: 0px;
+                                margin-bottom: 0px;
+                                padding: 3px;
+                                }
+                                .invoice {
+                                width: 30%;
+                                float: left;
+                                margin-top: 0px;
+                                }
+                                .invoice p {
+                                width: 100%;
+                                float: left;
+                                text-align: center;
+                                }
+                                .job {
+                                width: 60%;
+                                float: right;
+                                }
+                                .job p {
+                                text-align: center;
+                                }
+                                .receiver {
+                                width: 40%;
+                                border: 1px solid;
+                                padding: 5px;
+                                float: left;
+                                margin-top: 85px;
+                                }
+                                .receiver p {
+                                margin-left: 10px;
+                                }
+                                .receiver .liquid {
+                                border: 1px solid;
+                                border-style: dashed;
+                                display: inline-block;
+                                width: 50%;
+                                margin-left: 10px;
+                                }
+                                .unless {
+                                width: 50%;
+                                float: right;
+                                text-align: left;
+                                margin-top: 15px;
+                                }
+                                .vat-no {
+                                width: 40%;
+                                float: left;
+                                text-align: center;
+                                }
+                                .col_01 {
+                                width: 40%;
+                                float: left;
+                                }
+                                .col_02 {
+                                width: 60%;
+                                float: left;
+                                }
+                                .col_02 p{
+                                margin-left: 10px;
+                                }
+                                .box {
+                                width: 95%;
+                                height: 156px;
+                                border: 1px solid #000;
+                                }
+                                .to {
+                                float: right;
+                                margin-right: 5px;
+                                width: 9%;
+                                }
+                                .to-1 {
+                                float: left;
+                                margin-left: 5px;
+                                width: 88%;
+                                }
+                                .vat-inv {
+                                margin-left: 5px;
+                                margin-top: 136px;
+                                }
+                                .margin {
+                                margin-left: 23%;
+                                }
+                                .width {
+                                width: 33%;
+                                float: left;
+                                }
+                                .right_align {
+                                    width: 45%;
+                                    text-align: right;
+                                    display: inline-block;
+                                }
+                                .left_align{
+                                width: 49%;
+                                float:left;
+                                }
+                                .branch {
+                                float: left;
+                                }
+                                .center {
+                                margin-left: 20%;
+                                }
+
+                                .boxtab {
+
+                                    width: 100%;
+                                    border-left: 1px solid;
+                                    float: left;
+
+                                }
+                                .tableset {
+
+                                    width: 50%;
+                                    float: right;
+                                    margin-bottom: 7px;
+
+                                }
+                               
+                            </style>
+                            <div class="main-data">
+                                <div class="center-data">
+                                    <div class="logistic">
+                                        <p class="no-margin"><span class="solid"></span>
+                                            <span class="liquid" t-esc="o.company_id.street"></span></p>
+                                        <p class="no-margin"><span class="solid"></span>
+                                            <span class="liquid" t-esc="o.company_id.street2"></span></p>
+                                        <p class="no-margin"><span class="solid"></span>
+                                            <span class="liquid" t-esc="o.company_id.city"></span></p>
+                                        <p class="no-margin"><span class="solid"></span>
+                                            <span class="liquid" t-esc="o.company_id.country_id.name"></span></p>
+                                        <p class="no-margin"><span class="solid">Tel</span>
+                                            <span class="liquid" t-esc="o.company_id.phone"></span></p>
+                                        <p class="no-margin"><span class="solid">Fax</span>
+                                            <span class="liquid" t-esc="o.company_id.fax"></span></p>
+                                        <p class="no-margin"><span class="solid">E-mail</span>
+                                            <span class="liquid" t-esc="o.company_id.email"></span></p>
+                                        <p class="no-margin"><span class="solid">Web</span>
+                                            <span class="liquid" t-esc="o.company_id.website"></span></p>
+                                    </div>
+                                    <br></br>
+                                    <br class="clearfloat"></br>
+
+                                    <div class="col_01">
+                                        <div>
+                                            <p class="left_align"><span class="solid">INVOICE No.</span><span class="liquid" t-esc="o.number"></span></p>
+                                            <p class="right_align">رقم الفاتورة</p>
+                                        </div>
+                                        <div class="box">
+                                            <div class="to">
+                                                <p><span class="solid">:لي</span><span class="liquid" ></span></p>
+                                            </div>
+                                            <div class="to-1">
+                                                <p><span class="solid">To:</span>
+                                                <b><span class="liquid" t-esc="o.partner_id.name"></span></b>
+                                                <span class="liquid" t-esc="o.partner_id.street"></span>
+                                                <span class="liquid" t-esc="o.partner_id.city"></span>
+                                                <span class="liquid" t-esc="o.partner_id.country_id.name"></span>
+                                                </p>
+                                            </div>
+                                            <div class="to-1">
+                                                <p><span class="solid">Phone:</span>
+                                                <span class="liquid" t-esc="o.partner_id.phone"></span>
+                                                </p>
+                                            </div>
+                                            <div class="to-1">
+                                                <p><span class="solid">Fax:</span>
+                                                <span class="liquid" t-esc="o.partner_id.fax"></span>
+                                                </p>
+                                            </div>
+
+                                            <div class="vat-inv">
+                                                <p><span class="solid">Vat No</span><span class="liquid"  t-esc="o.partner_id.vat"></span></p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col_02">
+                                        <div>
+                                            <p><span class="solid">Date التاريخ :</span><span class="liquid"  t-esc="o.date"></span></p>
+                                            <table width="100%">
+                                                <tr>
+                                                    <th><span class="solid">JOB NO:</span><span class="liquid" ><span class="solid">رقم العملية</span><span class="liquid"></span></span></th>
+                                                    <th><span class="solid">Customer Ref:</span><span class="liquid"  ><span class="solid">الرقم المرجعي</span><span class="liquid"></span></span></th>
+                                                    <th><span class="solid">OUR REFERENCE</span><span class="liquid"  ><span class="solid"></span><span class="liquid"></span></span></th>
+                                                </tr>
+                                                <tr>
+                                                    <td t-esc="o.sr_no"></td>
+                                                    <td t-esc="o.customer_ref"></td>
+                                                    <td t-esc="o.our_job"></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div>
+                                            <p class="no-margin"><span class="solid">OUR BANK A/C NAME </span><span class="liquid">LOGISTIC VISION CO. شركة الرؤية اللوجستية التجارية</span></p>
+                                            <p class="no-margin"><span class="solid">OUR BANK DETAILS</span><span class="liquid">NCB البنك الاهلي التجاري</span></p>
+                                            <p class="no-margin"><span class="solid"></span><span class="liquid"><span class="margin">:A/C No.:11564128000101</span></span></p>
+                                            <p class="no-margin"><span class="solid"></span><span class="liquid"><span class="margin">:BRANCH-JEDDAH</span> </span></p>
+                                            <p class="no-margin"><span class="solid"></span><span class="liquid"><span class="margin">:IBAN SA52 1000 0011 5641 2800 0101</span></span></p>
+                                            <p class="no-margin"><span class="solid"><span class="branch">VAT No.الرقم الضريبي </span></span><span class="liquid" t-esc="o.company_id.vat"></span></p>
+                                        </div>
+                                    </div>
+                                    <br class="clearfloat"></br>
+
+                                    <table width="100%" class="table-1">
+                                        <tr>
+                                            <th style="text-align:center;font-size:10px">Custom Declaration No:رقم الإقرار الجمركي</th>
+                                            <th style="text-align:center;font-size:10px">Bayan no:رقم البيان</th>
+                                            <th style="text-align:center;font-size:10px">Final Bayan Date:تاريخ الفسح النهائي</th>
+                                            <th style="text-align:center;font-size:10px">BL No. / WB No:رقم بوليصة الشحن </th>
+                                        </tr>
+                                        <tr>
+                                            <th>/////</th>
+                                            <th><span t-esc="o.bayan_no"></span></th>
+                                            <th><span t-esc="o.final_date"></span></th>
+                                            <th><span t-esc="o.bill_num"></span></th>
+                                        </tr>
+                                    </table>
+                                    <table width="100%">
+                                        <tr>
+                                            <th style="text-align:center">Description  الوصف <hr style="margin:0px;border-top: 1px solid #000000;padding:2px 0px"></hr></th>
+
+                                            <th class="space1" style="text-align:center">Qty الكمية <hr style="margin:0px;border-top: 1px solid #000000;padding:2px 0px"></hr></th>
+                                            <th class="space2" style="text-align:center">UNIT PRICE سعر الوحدة <hr style="margin:0px;border-top: 1px solid #000000;padding:2px 0px"></hr></th>
+                                            <th class="space3" style="text-align:center">TOTAL AMOUNT المبلغ الاجمالي <hr style="margin:0px;border-top: 1px solid #000000;padding:2px 0px"></hr></th>
+                                        </tr>
+                                        <t t-foreach="o.invoice_line_ids" t-as="data">
+                                            <tr>
+                                                <td style="border-top:hidden;padding:4px"><span t-esc="data.name"></span></td>
+                                                <td style="border-top:hidden;padding:4px;text-align:center"><span t-esc="data.quantity"></span></td>
+                                                <td style="border-top:hidden;padding:4px;text-align:center"><span t-esc="data.price_unit"></span></td>
+                                                <td style="border-top:hidden;padding:4px;text-align:center"><span t-esc="data.price_subtotal + data.afterTaxAmt"></span></td>
+                                            </tr>
+                                        </t>
+                                        <t t-foreach="number" t-as="line">
+                                            <tr >                     
+                                                <td style="border-top:hidden;padding:12px"></td>           
+                                                <td style="border-top:hidden;padding:12px"></td>           
+                                                <td style="border-top:hidden;padding:12px"></td>           
+                                                <td style="border-top:hidden;padding:12px"></td>       
+
+                                            </tr>           
+                                        </t>
+                                    </table>
+                                    <div class="boxtab">
+                                        <div class="tableset">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td>TOTAL WITHOUT VAT</td>
+                                                    <td>اإلجمالي قبل ضريبة القيمة المضافة</td>
+                                                    <td><span t-esc="o.amount_untaxed"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td> 5% VAT</td>
+                                                    <td>%5 الضريبة</td>
+                                                    <td><span t-esc="o.amount_tax"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Total</td>
+                                                    <td>الاجما لي </td>
+                                                    <td><span t-esc="o.amount_total"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3"><span class="solid">Amount in Words:</span><span class="liquid"><span class="center" t-esc="number_to_spell(o.amount_total)"></span></span></td>
+                                                    <!-- <td></td> -->
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <table width="100%">
+                                        <tr>
+                                            <td><span class="solid">Prepared By:</span> <span class="liquid" t-esc="getname()"></span> </td>
+                                            <td rowspan="4"><span class="solid">APPROVED BY</span><span class="liquid"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="solid">CHECKED BY:</span><span class="liquid"></span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td><span class="solid">Due Date:</span><span class="liquid" t-esc="o.payment_term_id.name"></span></td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                    <div class="receiver">
+                                        <p><span class="solid">NAME:</span><span class="liquid"></span></p>
+                                        <p><span class="solid">DATE:</span><span class="liquid"></span></p>
+                                        <p><span class="solid">RECEIVER'S Sign &amp; Stamp</span><span class="liquid"></span></p>
+                                    </div>
+                                    <div class="unless">
+                                        <p>UNLESS   WRITTEN   NOTICE  OF  EXCEPTION  TO THE  ABOVE  IS </p>
+                                        <p>RECEIVED WITHIN 10 DAYS IT IS UNDERSTOOD TO BE CORRECT</p>
+                                    </div>
+                                    <div class="receiver" style="float: right; width: 50% ; margin-top: 70px">
+                                        <p>WHITE: CUSTOMER, PINK: ACCOUNT, YELLOW: MASTER FILE</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <br></br>
+                            <br></br>
+                            <br></br>
+                        </div><!--end of page-->
+
+                    </t>
+                </t>
+            </t>
+
+        </template>
+
+    </data>
+
+</openerp>

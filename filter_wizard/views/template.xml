@@ -1,0 +1,120 @@
+<?xml version="1.0"?> 
+<odoo>
+
+    <data>
+        <template id="assets_backend" name="max_web_draggable_dialog assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/filter_wizard/static/src/js/javascriptfile.js"></script>
+            </xpath>
+        </template>
+    </data>
+
+    <record id="filter_wizard_form_view" model="ir.ui.view">
+        <field name="name">filter_wizard_form_view</field>
+        <field name="model">filters.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Date Wise Filter">
+                
+                <group name="group_top">
+                    <group name="left">
+                        <field name="bl"/>
+                        <field name="ref"/>
+                    </group>
+                    <group name="right">
+                        <field name="bn"/>
+                        <field name="c_n"/>
+                        <field name="m_name" invisible="1"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <button name="get_result" type="object" string="Filter" class="oe_highlight"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <record id="filter_wizard_action_import" model="ir.actions.act_window">
+        <field name="name">Custom Search</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">filters.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="filter_wizard_form_view"/>
+        <field name="target">new</field> 
+        <field name="context">{'default_m_name': 'import.logic'} </field> 
+    </record>
+
+    <record id="filter_wizard_action_export" model="ir.actions.act_window">
+        <field name="name">Custom Search</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">filters.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="filter_wizard_form_view"/>
+        <field name="target">new</field> 
+        <field name="context">{'default_m_name': 'export.logic'} </field> 
+    </record>
+
+    <record model="ir.values" id="date_wise_filter1">
+        <field name="model_id" ref="" />
+        <field name="name">Print From Wizard</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval ="'ir.actions.act_window,'+str(ref('filter_wizard_action_import'))"/>
+        <field name="key">action</field>
+        <field name="model">import.logic</field>
+    </record>
+
+    <record model="ir.values" id="date_wise_filter2">
+        <field name="model_id" ref="" />
+        <field name="name">Print From Wizard</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval ="'ir.actions.act_window,'+str(ref('filter_wizard_action_export'))"/>
+        <field name="key">action</field>
+        <field name="model">export.logic</field>
+    </record>
+    
+<!--     <record id="filter_wizard_action_trans" model="ir.actions.act_window">
+        <field name="name">Custom Search</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">filters.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="filter_wizard_form_view"/>
+        <field name="target">new</field> 
+        <field name="context">{'default_m_name': 'sale.order'} </field> 
+    </record>
+
+    <record id="filter_wizard_action_proj" model="ir.actions.act_window">
+        <field name="name">Custom Search</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">filters.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="filter_wizard_form_view"/>
+        <field name="target">new</field> 
+        <field name="context">{'default_m_name': 'freight.forward'} </field> 
+    </record> -->
+
+
+<!--     <record model="ir.values" id="date_wise_filter3">
+        <field name="model_id" ref="" />
+        <field name="name">Print From Wizard</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval ="'ir.actions.act_window,'+str(ref('filter_wizard_action_trans'))"/>
+        <field name="key">action</field>
+        <field name="model">sale.order</field>
+    </record>
+
+    <record model="ir.values" id="date_wise_filter4">
+        <field name="model_id" ref="" />
+        <field name="name">Print From Wizard</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval ="'ir.actions.act_window,'+str(ref('filter_wizard_action_proj'))"/>
+        <field name="key">action</field>
+        <field name="model">freight.forward</field>
+    </record> -->
+
+</odoo>
+

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?> 
+<odoo> 
+
+    <template id="report_header_custom" inherit_id="report.external_layout_header">
+        <xpath expr="//div[@class='header']" position="replace">
+            <div class ="header">
+                <p> </p>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="report_footer_custom" inherit_id="report.external_layout_footer">
+        <xpath expr="//div[@class='footer']" position="replace">
+            <div class ="footer">
+                <p> </p>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>

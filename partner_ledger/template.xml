@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<openerp>
+    <!--<template id="assets_backend" name="custom assets" inherit_id="web.assets_backend">-->
+        <!--<xpath expr="." position="inside">-->
+            <!--<link rel="stylesheet" href="/partner_ledger/static/src/css/styles.css"/>-->
+        <!--</xpath>-->
+    <!--</template>-->
+    <data>
+        <report
+
+                id="report_for_partner_ledger_2"
+                model="res.partner"
+                name="partner_ledger.partner_ledger_2_report"
+                file="partner_ledger.partner_ledger_2_report"
+                report_type="qweb-html"
+                string="Partner Ledger"
+                menu="False"/>
+
+        <record id="partner_ledger_2_wizard" model="ir.ui.view">
+            <field name="name">partner_ledger_2_wizard</field>
+            <field name="model">partner.ledger</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Report">
+
+                    <group name="group_top">
+
+                        <group name="group_left">
+
+                            <field name="partner"/>
+                            <field name="form"/>
+
+                        </group>
+
+                        <group name="group_right">
+
+                            <field name="entry_type" />
+                            <field name="to"/>
+
+                        </group>
+
+                    </group>
+
+                    <footer style="height: 30px !important; border: none !important;">
+                        <button name="%(report_for_partner_ledger_2)d" type="action" string="Print" class="oe_highlight "/>
+                    </footer>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="partner_ledger_2_action" model="ir.actions.act_window">
+            <field name="name">Partner Ledger</field>
+            <field name="res_model">partner.ledger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="partner_ledger_2_wizard"/>
+            <field name="target">new</field>
+            <field name="context">{'default_partner': active_id}</field>
+        </record>
+
+        <record id="partner_ledger_2_menu_action" model="ir.actions.act_window">
+            <field name="name">Partner Ledger</field>
+            <field name="res_model">partner.ledger</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="partner_ledger_2_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <record model="ir.values" id="date_wise_filter">
+        <field name="model_id" ref="" />
+        <field name="name">Print From Wizard</field>
+        <field name="key2">client_print_multi</field>
+        <field name="value" eval ="'ir.actions.act_window,'+str(ref('partner_ledger_2_action'))"/>
+        <field name="key">action</field>
+        <field name="model">res.partner</field>
+        </record>
+
+        <!--<record id="res_partner_ext1"   model="ir.ui.view">-->
+            <!--<field name="name">res_partner_ext</field>-->
+            <!--<field name="model">res.partner</field>-->
+            <!--<field name="inherit_id" ref="base.view_partner_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<xpath expr="//field[@name='name']"  position="after">-->
+                    <!--<button name="customer_statement_account" class="oe_highlight space" type="object" string=" Statement Accounts"/>-->
+                <!--</xpath>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!-- <menuitem id="partner_ledger_menu_item" name="Partner Ledger" action="partner_ledger_menu_action" parent="sales_sugar.confirmation_level" /> -->
+
+    </data>
+</openerp>

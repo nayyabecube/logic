@@ -1,0 +1,253 @@
+<?xml version="1.0"?> 
+<odoo>
+
+    <template id="assets_backend" name="custom assets" inherit_id="web.assets_backend"> 
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/custom_logistic/static/src/css/styles.css"/>
+        </xpath> 
+    </template>
+
+
+    <record id="move_form_view"   model="ir.ui.view"> 
+        <field name="name">move_form_view</field> 
+        <field name="model">sale.order</field> 
+        <field name="inherit_id" ref="sale.view_order_form"/> 
+        <field name="arch" type="xml">
+
+
+            <xpath expr="//field[@name='name']" position="after">
+    
+                    <button name="receive" string="Received POD" type="object" class="oe_highlight oe_right space"/>
+
+
+                    <button name="another" string="Issue The Way Bill" type="object" class="oe_highlight oe_right margin"/>
+
+            </xpath>
+
+            <xpath expr="//button[@name='240']" position="attributes">
+                <attribute name="attrs">{'invisible': 1}</attribute>
+
+            </xpath>
+
+            <xpath expr="//button[@name='print_quotation']" position="before">
+
+                <button name="somethinghappens" string="Create Invoice" type="object" class="oe_highlight" attrs="{'invisible': ['|',('state', '!=', 'rec'),('inv_chk', '=', True)]}"/>
+                    
+
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="after">
+
+                    <field name="project_no"/>
+                    <field name="crt_no"/>
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+
+                <field name="form"/>
+                <field name="to"/>
+                <field name="fleet_type"/>
+
+            </xpath>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
+
+                
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="domain">[('parent_id','=',False),('supplier','=',False),('customer','=',True)]</attribute>
+
+            </xpath>
+            
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="replace">
+                <field name="product_id"/>   
+            </xpath>
+
+            <xpath expr="//field[@name='state']" position="replace">
+
+                <field name="state" widget="statusbar" statusbar_visible="draft,sent,sale,rec"/>        
+
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+
+                <field name="by_customer"/>       
+                <field name="bill_type"/>       
+                <field name="freight_link"/>             
+                <field name="trans_link"/>                       
+                <field name="acc_link"/>                       
+                <field name="customer_site"/>
+                <field name="inv_chk" invisible="1"/>
+                <field name="pod_chk" invisible="1"/>            
+
+            </xpath>
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+
+                <field name="bill_no"/>
+                <field name="our_job" invisible="1"/>
+                <field name="sr_no" invisible="1"/>
+                <field name="customer_ref" invisible="1"/>
+                <field name="custom_dec" invisible="1"/>
+                <field name="bayan_no" invisible="1"/>
+                <field name="final_date" invisible="1"/>
+
+            </xpath>
+
+
+            <xpath expr="//field[@name='amount_tax']" position="replace">             
+
+            </xpath>
+
+
+
+            <xpath expr="//page[2]" position="before">
+
+                <page string="Transport Information">                    
+                    <group name="group_top">
+
+                        <group name="group_left">
+                            <field name="suppl_name" domain="[('types','=','trnas'),('supplier','=',True)]" context="{'default_supplier':True,'default_customer':False,'default_types':'trnas'}"/>
+                            
+                            
+
+                        </group>
+
+                        <group name="group_right">
+                            <field name="inter_num"/> 
+                             
+                               
+                        </group>
+
+                    </group>
+
+                     <group name="group_top">
+
+                        <group string="Driver">
+                            <field name="driver"/>
+                        </group>
+
+                        <group string=".">
+                            <field name="driver_num"/>
+                        </group>
+
+                    </group>
+
+                    <group name="group_top">
+
+                        <group string="Transport Information">
+                            <field name="form_t"/>
+                            <field name="fleet_type"/>
+                        </group>
+
+                        <group string=".">
+                            <field name="to_t"/>
+                            <field name="suppl_freight"/>
+                        </group>
+
+                    </group>
+
+                    <group name="group_top">
+
+                        <group string="Sale And Transport Dates">
+                            <field name="upload_date"/>
+                            <field name="delivery_date"/>
+                        </group>
+
+                        <group string=".">
+                            <field name="return_date"/>
+                            <field name="stuff_date"/>
+                        </group>
+
+                    </group>
+
+                    <group name="group_top">
+
+                        <group string="Receiver Information">
+                            <field name="recive_name"/>
+                        </group>
+
+                        <group string=".">
+                            <field name="recive_mob"/>
+                        </group>
+
+                    </group>
+
+                </page>
+
+            </xpath>
+
+        </field> 
+    </record>
+
+    <record id="vendor_bill_form_view"   model="ir.ui.view">
+        <field name="name">vendor_bill_form_view</field>
+        <field name="model">account.invoice</field> 
+        <field name="inherit_id" ref="account.invoice_supplier_form"/> 
+        <field name="arch" type="xml">
+
+
+            <xpath expr="//field[@name='reference']" position="after">
+
+                <field name="acount_link"/>
+                <field name="broker_link"/>
+            </xpath>
+
+            <xpath expr="//button[@name='%(account.action_account_invoice_payment)d']" position="replace">
+                <button name="reg_payment" type="object" string="Register Payment" class="oe_highlight" attrs="{'invisible':[('state','not in','open')]}"/>
+            </xpath>
+
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+
+                <field name="customer_id" attrs="{'invisible': [('check', '!=', True)]}" domain="[('customer','=',True)]"/>
+                <field name="check" invisible="1"/>
+
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="after">
+                    <field name="crt_no"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='invoice_line_tax_ids']" position="replace">
+
+                
+            </xpath>
+
+            <xpath expr="//field[@name='amount_tax']" position="replace">
+
+
+            </xpath>
+
+            <xpath expr="//field[@name='tax_line_ids']" position="replace">
+
+
+            </xpath>
+
+
+        </field> 
+    </record>
+
+    
+
+    <record model="ir.ui.view" id="rental_product_sales_new">
+    <field name="model">sale.order</field>
+    <field name="name">sale.order.rental.new</field>
+    <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+    <field name="arch" type="xml">
+        <xpath expr="//button[@name='action_view_delivery']" position="attributes">
+            <attribute name="invisible">1</attribute>
+        </xpath>
+        <xpath expr="//button[@name='action_view_invoice']" position="attributes">
+            <attribute name="invisible">1</attribute>
+        </xpath>
+    </field>
+</record>
+
+
+
+
+
+    
+    
+</odoo>

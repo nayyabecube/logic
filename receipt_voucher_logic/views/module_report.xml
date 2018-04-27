@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+
+    <data>   
+
+        <template id="module_report">
+
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                <t t-foreach="docs" t-as="o">
+
+                        <div class="page">
+
+							<style>
+
+								.main-data {
+									width: 100%;
+								}
+								.center-data {
+									width: 100%;
+									margin: 0px auto;
+								}
+								table {
+									border: 1px solid #000;
+									border-spacing: 0px;
+								}
+								table tr td {
+									border-bottom: 1px solid #000;
+									border-right: 1px solid #000;
+									padding: 10px 5px;
+								}
+								table tr td:last-child {
+									border-right: none;
+									width: 250px;
+								}
+								table tr:last-child td,
+								table tr.second-one td {
+									border-bottom: none;
+								}
+
+								h2 {
+								text-align: center;
+								}
+								.solid {
+									font-weight: bold;
+								}
+								.solid1 {
+									font-weight: bold;
+									text-align: right;
+								}
+								.solid2 {
+									font-weight: bold;
+									text-align: center;
+								}
+								    
+								.logo {
+								width: 60%;
+								float: right;
+								}
+								.logo {
+									width: 62%;
+									float: right;
+								}
+								.clearfloat {
+									clear: both;
+									float: none;
+								}
+								table tr td:first-child {
+									width: 325px;
+								}
+								table tr td:nth-child(2) {
+									min-width: 150px;
+									padding-left :0px;
+								}
+
+							</style>
+
+
+							<div class="main-data">
+
+								<div class="center-data">
+									<div class="logo">
+										<img src="/receipt_voucher_logic/static/src/img/logo.png" alt="" />
+									</div>
+									<br class="clearfloat"/>
+									<h2>RECEIPT VOUCHER</h2>
+									<h4 style="text-align: center;">اذن قبض</h4>
+									<table width="100%">
+										<tr>
+											<td class="solid">
+												<span>No:  <span t-esc="o.number"></span> رقم  </span>
+											</td>
+											<td class="solid2">
+												<span>Date:  التاريخ  </span>
+												<span t-esc="o.date"></span>
+											</td>
+											<td class="solid1">
+												<span>Amount:  المبلغ  </span>
+												<span t-esc="o.t_amount"></span>
+											</td>							
+										</tr>
+										<tr>
+											<td>
+												<span class="solid">Received from</span>
+											</td>
+											<td class="solid2">
+												<span t-esc="o.partner_id.name"></span>
+											</td>
+											<td class="solid1">
+												<span>مستلم من</span>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<span class="solid">Amount In Word:</span>
+											</td>
+											<td class="solid2">
+												<span t-esc="convert_amount(o.t_amount)"></span>
+											</td>
+											<td class="solid1">
+												<span>المبلغ   ريال لاغير</span>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<span class="solid">Cash - نقدا</span>
+											</td>
+											<td class="solid2">
+												<span t-esc="o.journal_id.name"></span>
+											</td>
+											<td class="solid1">
+												<span>Bank - بنك</span>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<span class="solid">Being:</span>
+											</td>
+											<td class="solid2">
+												<span>_____________________</span>
+											</td>
+											<td class="solid1">
+												<span>عبارة عن</span>
+											</td>
+										</tr>
+
+										<tr>
+											<td>
+												<span class="solid">Sig Received </span>
+											</td>
+											<td class="solid2">
+												<span t-esc="getname()"></span>
+											</td>
+											<td class="solid1">
+												<span>توقيع المستلم</span>
+											</td>
+										</tr>
+									</table>
+								</div>
+								
+							</div>
+			
+	                
+															
+                        </div><!--end of page-->
+                    </t>
+                </t>
+            </t>
+
+        </template>
+
+    </data>
+
+</openerp>

@@ -1,0 +1,733 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <template id="assets_backend" name="custom assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/custom_logistic/static/src/css/styles.css"/>
+        </xpath>
+    </template>
+
+
+    <record id="sales_export_logics" model="ir.sequence">
+        <field name="name">sales_export_logics</field>
+        <field name="code">export.logics</field>
+        <field name="prefix">S</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="sales_export_job" model="ir.sequence">
+        <field name="name">sales_export_job</field>
+        <field name="code">export.job.num</field>
+        <field name="prefix">J</field>
+        <field name="padding">4</field>
+    </record>
+
+
+    <record id="view_tree_export_module" model="ir.ui.view">
+        <field name="name">view_form_export</field>
+        <field name="model">export.logic</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree default_order ="sr_no desc" >
+                <field name="customer"/>
+                <field name="customer_ref"/>
+                <field name="our_job_no"/>
+                <field name="site"/>
+                <field name="bill_no"/>
+                <field name="bayan_no"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+
+
+
+    <!-- ===================================import start===================================== -->
+    <!-- ===================================import start===================================== -->
+    <!-- ===================================import start===================================== -->
+
+
+
+
+    <record id="view_form_import" model="ir.ui.view">
+        <field name="name">view_form_import</field>
+        <field name="model">import.logic</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Summary">
+                <header>
+                    <button name="create_sale" type="object" string="Create Transport Order" class="oe_highlight" attrs="{'invisible':[('stages','!=','done')]}"/>
+                    <button name="create_custom_charges" type="object" string="Create Custom Charges" class="oe_highlight" attrs="{'invisible':[('stages','!=','done')]}"/>
+                    <button name="prebay" type="object" string="Pre Bayan" class="oe_highlight"
+                            attrs="{'invisible':[('stages','!=','draft')]}"/>
+                    <button name="initialbay" type="object" string="Initial Bayan " class="oe_highlight" attrs="{'invisible':[('stages','!=','pre')]}"/>
+                    <button name="finalbay" type="object" string="Final Bayan" class="oe_highlight" attrs="{'invisible':[('stages','!=','initial')]}"/>
+                    <button name="over" type="object" string="Done" class="oe_highlight" attrs="{'invisible':[('stages','!=','final')]}"/>
+                    <!-- <button name="xlsx_report" type="object" string="Xlsx Report" class="oe_highlight"/> -->
+
+                    <field name="stages" widget="statusbar" clickable="True"/>
+                </header>
+                <sheet>
+                    <group name="top">
+                        <group name="left">
+                            <field name="s_no"/>
+                            <field name="job_no"/>
+                        </group>
+                        <group name="right">
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <group name="top">
+                        <group >
+                            <field name="site"/>
+                            <field name="customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+                            <field name="by_customer" domain="[('customer.id','=',customer)]" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="bill_bol" invisible="1"/>
+                            <field name="contt_bol" invisible="1"/>
+                            <field name="bill_types"/>
+                            <field name="customer_ref"/>
+                            <field name="cust_ref_inv"/>
+                            <field name="ship_Type"/>
+                            <field name="shipper_date"/>
+                            <field name="org_date"/>
+                            <field name="vessel_date"/>
+                            <field name="vessel_name"/>
+                            <field name="s_supplier"/>
+                            <field class="bill" name="bill_no"/>
+                            <field class="attach" name="bill_attach"/>
+                            <field name="rot_no"/>
+                            <field name="fri_id"/>
+
+                            <field name="tick" invisible="1"/>
+                        </group>
+                        <group>
+                            <field class="bill_1" name="do_no" attrs="{'invisible':['|',('stages','in','pre'),('stages','in','draft')]}"/>
+                            <field class="attach_1" name="do_attach" attrs="{'invisible':['|',('stages','in','pre'),('stages','in','draft')]}"/>
+                            <field class="bill_2" name="bayan_no" attrs="{'invisible':['|',('stages','in','pre'),('stages','in','draft')]}"/>
+                            <field class="attach_2" name="bayan_attach" attrs="{'invisible':['|',('stages','in','pre'),('stages','in','draft')]}"/>
+                            <field name="bayan_date" attrs="{'invisible':['|',('stages','in','pre'),('stages','in','draft')]}"/>
+
+                            <field name="fin_bayan_date" attrs="{'invisible':['|','|',('stages','in','pre'),('stages','in','draft'),('stages','in','initial')]}"/>
+
+                            <field name="final_attach" attrs="{'invisible':['|','|',('stages','in','pre'),('stages','in','draft'),('stages','in','initial')]}"/>
+                            <field name="eta"/>
+                            <field name="etd"/>
+                            <field name="inspect_Date" attrs="{'invisible':[('stages','in','draft')]}"/>
+                            <field name="duty_Date" attrs="{'invisible':[('stages','in','draft')]}"/>
+                            <field name="gate_Date" attrs="{'invisible':[('stages','not in','final')]}"/>
+                            <field name="des_Port" attrs="{'invisible':[('stages','not in','draft')]}"/>
+                            <field name="lan_Port" attrs="{'invisible':[('stages','not in','draft')]}"/>
+                            <field name="acc_link"/>
+                            <field name="tasdeer"/>
+                            <field name="BRZ_In" attrs="{'invisible':[('tasdeer','=',False)]}"/>
+                            <field name="BRZ_Out" attrs="{'invisible':[('tasdeer','=',False)]}"/>
+                            <field name="SDO_Date" attrs="{'invisible':[('tasdeer','=',False)]}"/>
+
+
+                        </group>
+                    </group>
+                    <group name="top">
+                        <group string="Custom Charges." attrs="{'invisible':[('bill_bol','=',False)]}">
+                        </group>
+                    </group>
+                    <field name="import_serv" nolabel='1' attrs="{'invisible':[('bill_bol','=',False)]}">
+                        <tree editable="bottom">
+                            <field name="type_serv"/>
+                            <field name="charge_serv"/>
+                        </tree>
+                    </field>
+                    <group name="top">
+                        <group string="Custom Charges." attrs="{'invisible':[('contt_bol','=',False)]}">
+                        </group>
+                    </group>
+                    <field name="imp_contt" nolabel='1' attrs="{'invisible':[('contt_bol','=',False)]}">
+                        <tree editable="bottom">
+                            <field name="sevr_type_imp"/>
+                            <field name="sevr_charge_imp"/>
+                            <field name="type_contt_imp"/>
+                        </tree>
+                    </field>
+                    <group name="top">
+                        <group string="Container Info.">
+                        </group>
+                    </group>
+                    <field name="import_id" nolabel='1'>
+                        <tree editable="bottom">
+                            <field name="crt_no"/>
+                            <field name="des"/>
+                            <field name="types"/>
+                            <field name="form"/>
+                            <field name="to"/>
+                            <field name="fleet_type"/>
+                            <field name="transporter" domain="[('supplier','=',True)]"/>
+                            <field name="trans_charge"/>
+                            <field name="custm_charge"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <group>
+                            <field name="status"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_filter_export" model="ir.ui.view">
+        <field name="name">view_filter_export</field>
+        <field name="model">export.logic</field>
+        <field name="arch" type="xml"> <search>
+            <field name="customer" string="Customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+            <field name="by_customer" domain="[('customer.id','=',customer)]"/>
+            <field name="customer_ref" string="Customer Reference"/>
+            <field name="bill_no" string="BL Number"/>
+            <field name="site" string="Site"/>
+            <field name="bayan_no" string="Pre Bayan Date"/>
+            <field name="status" string="Status"/>
+            <filter string="Today" name="Today" domain="[('state','in',('draft','pre'))]"/>
+            <filter string="Today" name="Today" domain="[('state','in',('draft','pre'))]"/>
+
+
+        </search>
+        </field>
+    </record>
+
+    <record id="view_filter_transportation" model="ir.ui.view">
+        <field name="name">view_filter_transportation</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_sale"/>
+        <field name="arch" type="xml"> <search>
+            <field name="partner_id" string="Customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+            <field name="by_customer" domain="[('customer.id','=',customer)]"/>
+            <field name="bill_no" string="BL Number"/>
+        </search>
+        </field>
+    </record>
+
+    <record id="view_filter_invoicing" model="ir.ui.view">
+        <field name="name">view_filter_invoicing</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="arch" type="xml"> <search>
+            <field name="partner_id" string="Customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+            <field name="by_customer" domain="[('customer.id','=',customer)]"/>
+            <field name="bill_num" string="BL Number"/>
+            <field name="state" string="State"/>
+        </search>
+        </field>
+    </record>
+
+
+    <record id="view_filter_FF" model="ir.ui.view">
+        <field name="name">view_filter_FF</field>
+        <field name="model">freight.forward</field>
+        <field name="arch" type="xml"> <search>
+            <field name="customer" string="Customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+            <field name="status"/>
+            <field name="types"/>
+            <field name="form"/>
+            <field name="to"/>
+        </search>
+        </field>
+    </record>
+
+    <record id="view_filter_import" model="ir.ui.view">
+        <field name="name">view_filter_import</field>
+        <field name="model">import.logic</field>
+        <field name="arch" type="xml"> <search>
+            <field name="customer" string="Customer"  domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+            <field name="by_customer" domain="[('customer.id','=',customer)]"/>
+            <field name="customer_ref" string="Customer Reference"/>
+            <field name="site" string="Site"/>
+            <field name="bill_no" string="BL / AWB Number"/>
+            <field name="bayan_no" string="Pre Bayan Date"/>
+
+        </search>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="logistic_export_calendar">
+        <field name="name">logistic_export_calendar</field>
+        <field name="model">export.logic</field>
+        <field name="priority" eval="2"/>
+        <field name="arch" type="xml">
+            <calendar string="Calendar View" date_start="date" color="site">
+                <field name="site"/>
+                <field name="customer"/>
+                <field name="customer_ref"/>
+                <field name="bill_no"/>
+                <field name="bayan_no"/>
+                <field name="status"/>
+            </calendar>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="logistic_export_graph">
+        <field name="name">logistic_export_graph</field>
+        <field name="model">export.logic</field>
+        <field name="type">graph</field>
+        <field name="arch" type="xml">
+            <graph string="Graph View">
+                <field name="site" group="True"/>
+                <field name="customer"/>
+                <field name="customer_ref"/>
+                <field name="bill_no"/>
+                <field name="bayan_no"/>
+                <field name="state" group="True"/>
+            </graph>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="logistic_export_pivot">
+        <field name="name">logistic_export_pivot</field>
+        <field name="model">export.logic</field>
+        <field name="arch" type="xml">
+            <pivot string="Pivot" display_quantity="True">
+                <field name="customer"/>
+                <field name="customer_ref"/>
+                <field name="site" type="measure"/>
+                <field name="bill_no" />
+                <field name="bayan_no"/>
+                <field name="status" type="dimension"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="sales_import_logics" model="ir.sequence">
+        <field name="name">sales_import_logics</field>
+        <field name="code">import.logics</field>
+        <field name="prefix">S</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="sales_import_job" model="ir.sequence">
+        <field name="name">sales_import_job</field>
+        <field name="code">import.job.num</field>
+        <field name="prefix">J</field>
+        <field name="padding">4</field>
+    </record>
+
+    <record id="view_tree_new_module" model="ir.ui.view">
+        <field name="name">view_form_import</field>
+        <field name="model">import.logic</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree default_order ="s_no desc"  >
+                <field name="customer"/>
+                <field name="customer_ref"/>
+                <field name="bill_no"/>
+                <field name="bayan_no"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_import_logic"
+                name="Import"
+                res_model="import.logic"
+                view_mode="tree,form" />
+
+    <act_window id="action_import_clearence"
+                name="Import"
+                res_model="import.logic"
+                view_mode="tree,form" />
+
+
+
+    <record id="sale.action_orders" model="ir.actions.act_window">
+        <field name="name">Transport Order</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+
+    </record>
+
+    <menuitem id="clear_import" name="Transportation" parent="sales_team.menu_base_partner" sequence="11"/>
+
+    <menuitem id="sale.menu_sale_order" name="Transport Order" action="sale.action_orders" parent="clear_import" sequence="1"/>
+
+
+    <menuitem id="menu_import" name="Custom Clearance" parent="sales_team.menu_base_partner" sequence="10"/>
+
+    <menuitem id="menu_import_logistic" name="Imports" parent="menu_import" action="action_import_logic" sequence=""/>
+
+
+    <record id="view_form_site" model="ir.ui.view">
+        <field name="name">view_form_site</field>
+        <field name="model">import.site</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Summary">
+                <sheet>
+                    <group name="top">
+                        <group >
+                            <field name="site_name" invisible="1"/>
+                            <field name="city"/>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="address"/>
+                            <field name="cnt_num"/>
+                        </group>/
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="import_status" model="ir.ui.view">
+        <field name="name">import_status</field>
+        <field name="model">import.status</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="comment" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="account_journal_configuration" model="ir.ui.view">
+        <field name="name">account_journal_configuration</field>
+        <field name="model">account_journal.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Accounts and Journals Configuration" create="false" delete="false">
+                <sheet>
+                    <group name="export" string="Export">
+                        <group >
+                            <field name="e_vendor_account"/>
+                            <field name="e_invoice_account"/>
+                        </group>
+                        <group>
+                            <field name="e_vendor_journal"/>
+                            <field name="e_invoice_journal"/>
+                        </group>
+                    </group>
+                    <group name="import" string="Import">
+                        <group >
+                            <field name="i_invoice_account"/>
+                        </group>
+                        <group>
+                            <field name="i_invoice_journal"/>
+                        </group>
+                    </group>
+                    <group name="transport" string="Transportation">
+                        <group >
+                            <field name="t_vendor_account"/>
+                        </group>
+                        <group>
+                            <field name="t_vendor_journal"/>
+                        </group>
+                    </group>
+                    <group name="project" string="Project">
+                        <group >
+                            <field name="freight_invoice_account"/>
+                            <field name="storage_invoice_account"/>
+                            <field name="e_custom_invoice_account"/>
+                            <field name="i_custom_invoice_account"/>
+                        </group>
+                        <group>
+                            <field name="p_invoice_journal"/>
+                            <field name="transport_invoice_account"/>
+                            <field name="e_custom_exm_invoice_account"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <act_window id="action_site_logic"
+                name="Site"
+                res_model="import.site"
+                view_mode="tree,form" />
+
+    <menuitem id="menu_site_logistic" name="Site" parent="sales_team.menu_sale_config" action="action_site_logic" sequence="1"/>
+
+    <record model="ir.actions.act_window" id="purchase_broker_configuration">
+        <field name="name">Broker</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain" >[('brooker', '=',True)]</field>
+        <field name="context" eval="{'default_brooker':1}"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="account_journal_config_act">
+        <field name="name">Accounts and Journals Configuration</field>
+        <field name="res_model">account_journal.configuration</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem name="Broker"
+              id="broker_sales_configuration_main"
+              parent="sales_team.menu_sale_config"
+              sequence="1"/>
+
+    <menuitem name="Broker"
+              id="broker_sales_configuration"
+              parent="broker_sales_configuration_main"
+              action="purchase_broker_configuration"
+              sequence="1"/>
+
+
+
+
+    <!-- =============================export================================      -->
+    <!-- =============================export================================      -->
+    <!-- =============================export================================      -->
+    <!-- =============================export================================      -->
+    <!-- =============================export================================      -->
+    <!-- =============================export================================      -->
+    <!-- =============================export================================      -->
+
+
+
+
+    <record id="view_form_export" model="ir.ui.view">
+        <field name="name">view_form_export</field>
+        <field name="model">export.logic</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Summary">
+                <header>
+                    <button name="create_sale" type="object" string="Create Transport Order" class="oe_highlight" attrs="{'invisible':[('state','!=','done')]}"/>
+                    <button name="create_custom_charges" type="object" string="Create Custom Charges" class="oe_highlight" attrs="{'invisible':[('state','!=','done')]}"/>
+                    <button name="booker" type="object" string="Broker Invoices" class="oe_highlight" attrs="{'invisible':[('state','!=','custom_exam')]}"/>
+                    <button name="prebay" type="object" string="Pre Bayan" class="oe_highlight"   attrs="{'invisible':[('state','!=','draft')]}"/>
+                    <button name="initialbay" type="object" string="Initial Bayan " class="oe_highlight" attrs="{'invisible':[('state','!=','pre')]}"/>
+                    <button name="finalbay" type="object" string="Final Bayan" class="oe_highlight" attrs="{'invisible':[('state','!=','initial')]}"/>
+                    <button name="over" type="object" string="Done" class="oe_highlight" attrs="{'invisible':[('state','!=','custom_exam')]}"/>
+                    <field name="state" widget="statusbar" clickable="True" statusbar_visible="pre,initial,final,custom_exam,done"/>
+                </header>
+                <sheet>
+                    <group name="top">
+                        <group name="left">
+                            <field name="sr_no"/>
+                            <field name="our_job_no"/>
+                        </group>
+                        <group name="right">
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <group name="top">
+                        <group >
+                            <field name="site"/>
+                            <field name="customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+                            <field name="by_customer" domain="[('customer.id','=',customer)]" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+                            <field name="bill_bol" invisible="1"/>
+                            <field name="cont_bol" invisible="1"/>
+                            <field name="bill_types"/>
+                            <field name="customer_ref"/>
+                            <field name="cust_ref_inv"/>
+                            <field name="shipper_date"/>
+                            <field name="vessel_date"/>
+                            <field name="vessel_name"/>
+                            <field name="s_supplier"/>
+                            <field name="fri_id"/>
+                            <field name="acc_link"/>
+                            <field name="eta"/>
+                            <field name="etd"/>
+                            <field name="tick" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="mani_date" attrs="{'invisible':[('state','in','draft')]}"/>
+                            <field class="bill_3" name="bill_no"  attrs="{'invisible':[('state','in','draft')]}"/>
+                            <field name="rot_no"/>
+                            <field class="attach_3" name="bill_attach"  attrs="{'invisible':[('state','in','draft')]}"/>
+                            <field class="bill_4" name="bayan_no"  attrs="{'invisible':[('state','in','draft')]}"/>
+                            <field class="attach_4" name="bayan_attach"  attrs="{'invisible':[('state','in','draft')]}"/>
+                            <field name="pre_bayan"  attrs="{'invisible':[('state','in','draft')]}"/>
+                            <field name="bayan_date"  attrs="{'invisible':['|',('state','in','pre'),('state','in','draft')]}"/>
+                            <field name="shutl_start_date" attrs="{'invisible':['|',('state','in','pre'),('state','in','draft')]}"/>
+                            <field name="shutl_end_date" attrs="{'invisible':['|','|',('state','in','pre'),('state','in','draft'),('state','in','initial')]}"/>
+                            <field name="fin_bayan_date" attrs="{'invisible':['|','|',('state','in','pre'),('state','in','draft'),('state','in','initial')]}"/>
+                            <field name="final_attach" attrs="{'invisible':['|','|',('state','in','pre'),('state','in','draft'),('state','in','initial')]}"/>
+                            <field name="custom_exam" attrs="{'invisible':['|','|',('state','in','pre'),('state','in','draft'),('state','in','initial')]}"/>
+                        </group>
+                    </group>
+                    <group name="top">
+                        <group string="Custom Examination." attrs="{'invisible':[('custom_exam','=',False)]}">
+                        </group>
+                    </group>
+                    <field name="export_link" attrs="{'invisible':[('custom_exam','=',False)]}">
+                        <tree editable="bottom">
+                            <field name="container_no"/>
+                            <field name="new_seal"/>
+                            <field name="broker" domain="[('brooker','=',True)]"/>
+                            <field name="amt_paid"/>
+                        </tree>
+                    </field>
+                    <group name="top">
+                        <group string="Custom Charges." attrs="{'invisible':[('bill_bol','=',False)]}">
+                        </group>
+                    </group>
+                    <field name="export_serv" nolabel='1' attrs="{'invisible':[('bill_bol','=',False)]}">
+                        <tree editable="bottom">
+                            <field name="sevr_type"/>
+                            <field name="sevr_charge"/>
+                        </tree>
+                    </field>
+                    <group name="top">
+                        <group string="Custom Charges." attrs="{'invisible':[('cont_bol','=',False)]}">
+                        </group>
+                    </group>
+                    <field name="cont_serv" nolabel='1' attrs="{'invisible':[('cont_bol','=',False)]}">
+                        <tree editable="bottom">
+                            <field name="sevr_type_cont"/>
+                            <field name="sevr_charge_cont"/>
+                            <field name="type_contt"/>
+                        </tree>
+                    </field>
+                    <group name="top">
+                        <group string="Container Info.">
+                        </group>
+                    </group>
+                    <field name="export_id" nolabel='1'>
+                        <tree editable="bottom">
+                            <field name="crt_no"/>
+                            <field name="des"/>
+                            <field name="types"/>
+                            <field name="form"/>
+                            <field name="to"/>
+                            <field name="fleet_type"/>
+                            <field name="transporter" domain="[('supplier','=',True)]"/>
+                            <field name="trans_charge"/>
+                            <field name="custm_charge"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <group>
+                            <field name="status"/>
+                            <field name="remarks"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="InvLineExt" model="ir.ui.view">
+        <field name="name">InvLineExt</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name= 'price_subtotal']" position="after">
+                <field name="afterTaxAmt"/>
+            </xpath>
+            <xpath expr="//field[@name='team_id']" position="after">
+                <field name="our_job" invisible="1"/>
+                <field name="sr_no" invisible="1"/>
+                <field name="customer_ref" invisible="1"/>
+                <field name="custom_dec" invisible="1"/>
+                <field name="bayan_no" invisible="1"/>
+                <field name="final_date" invisible="1"/>
+                <field name="customer_site" invisible="0"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- Inherit Form View to Modify it sale order line-->
+
+    <!-- Inherit Form View to Modify it -->
+    <record id="ResPartnerExtFrom" model="ir.ui.view">
+        <field name="name">ResPartnerExtFrom</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='category_id']" position="after">
+                <!-- Add your fields or attributes here -->
+                <field name="vat"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!--Inherit Form View to Modify it-->
+    <record id="ResCompanyExtFrom" model="ir.ui.view">
+        <field name="name">ResCompanyExtFrom</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="string">VAT</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="account_journal_config_tree_view" model="ir.ui.view">
+        <field name="name">account_journal_config_tree_view</field>
+        <field name="model">account_journal.configuration</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Accounts and Journals Configuration" create="false" delete="false">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window id="action_export_logic"
+                name="Export"
+                res_model="export.logic"
+                view_mode="tree,form,calender,graph,pivot" />
+
+    <menuitem id="menu_export_logistic" name="Exports" parent="menu_import" action="action_export_logic" sequence=""/>
+    <menuitem id="account_journal_config_menu" name="Accounts and Journals Configuration" parent="account.menu_finance_entries"
+              action="account_journal_config_act" sequence="40"/>
+
+    <record model="ir.rule" id="ir_values_export_active_user">
+        <field name="name">Active User Rule Export</field>
+        <field name="model_id" ref="custom_logistic.model_export_logic"/>
+        <field name="domain_force">[('customer','=',user.partner_id.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+    <record model="ir.rule" id="ir_values_import_active_user">
+        <field name="name">Active User Rule Import</field>
+        <field name="model_id" ref="custom_logistic.model_import_logic"/>
+        <field name="domain_force">[('customer','=',user.partner_id.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+    <record model="ir.rule" id="ir_values_transportation_active_user">
+        <field name="name">Active User Rule Transportation</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="domain_force">[('partner_id','=',user.partner_id.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+    <record model="ir.rule" id="ir_values_project_active_user">
+        <field name="name">Active User Rule Project</field>
+        <field name="model_id" ref="custom_logistic.model_freight_forward"/>
+        <field name="domain_force">[('customer','=',user.partner_id.id)]</field>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="perm_create" eval="False"/>
+    </record>
+
+</odoo>

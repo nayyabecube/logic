@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>   
+		<template id="logistic_invoice1">
+			<t t-call="report.html_container">
+				<t t-call="report.external_layout">
+					<t t-foreach="docs" t-as="o">
+						<div class="page">
+							<style>
+								.main-data {
+									width: 100%;
+								}
+								.center-data {
+									width: 1000px;
+									margin: 0px auto;
+								}
+								.heading {
+									width: 47%;
+									float: left;
+									padding: 10px;
+
+								}
+								.no-margin {
+									margin-top: 0px;
+									margin-bottom: 0px;
+								}
+								.center-data p {
+									font-size: 15px;
+								}
+								.solid {
+									font-weight: bold;
+									margin-right: 20px;
+								}
+								table, td, th {
+									border: 2px solid;
+									border-collapse: collapse;
+									margin-top: 10px;
+									text-align: left;
+									padding: 5px;
+									border-color: #b4b4b4;
+									font-size: 15px;
+									margin: 0px 0px 20px 0px;
+								}
+								table tr td:first-child,
+								table tr th:first-child {
+								   font-weight: bold;
+								}
+								.clearfloat {
+									clear: both;
+									float: none;
+								}
+								p {
+									margin-left: 20px;
+								}
+							</style>
+							
+							<div class="main-data">
+							<div class="center-data">
+								<div class="heading">
+									<img src="/logistic_invoice/static/src/img/logo.png" alt="logo"/>
+								</div>
+								<div class="heading">
+									<p class="no-margin">Hala Tower {A} 6th Floor Office No 1</p>
+									<p class="no-margin">AL Baghdadiah Dist</p>
+									<p class="no-margin">P.O. Box 4443 Jeddah 2224</p>
+									<p class="no-margin">Kingdom Of Saudi Arabia</p>
+									<p class="no-margin"><strong>Tel:</strong> +966 920002516</p>
+									<p class="no-margin"><strong>Fax:</strong> + 966 126490511</p>
+									<p class="no-margin"><strong>E-Mail:</strong> khader@logistic-vision.com</p>
+									<p class="no-margin"><strong>Web:</strong> info@logistic-vision.com</p>
+								</div>
+								<div class="heading">
+									<p class="no-margin"><span class="solid">INVOICE NO:</span><span class="liquid" t-esc="o.number"></span></p>
+								</div>
+								<div class="heading">
+									<p class="no-margin"><span class="solid">DATED:</span><span class="liquid" t-esc="o.date_invoice"></span></p>
+								</div>
+								<div class="heading" style="width:40%; margin-right: 50px; border: 2px solid;border-color:#b4b4b4; padding: 20px;">
+									<p class="no-margin"><span class="solid">TO:</span><span class="liquid" t-esc="o.partner_id.name"></span></p>
+								</div>
+								<table style=" width:50%; float:right;">
+									<tr>
+										<th>Job No</th>
+										<th>Customer Ref</th>
+										<th>OUR REFERENCE</th>
+									</tr>
+									<tr>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
+								</table>
+								<div class="heading" style="float:right;">
+									<p class="no-margin"><span class="solid">Our BANK A/C NAME</span><span class="liquid">LOGISTIC VISION</span></p>
+									<p class="no-margin"><span class="solid">Our BANK A/C DETAILS</span><span class="liquid">NCB</span></p>
+									<p class="no-margin"><span class="solid">A/C NO</span><span class="liquid">11564128000101</span></p>
+									<p class="no-margin"><span class="solid">BRANCH</span><span class="liquid">JEDDAH</span></p>
+									<p class="no-margin"><span class="solid">IBAN</span><span class="liquid">SA5210000011564128000101</span></p>
+								</div>
+								<table width="100%">
+									<tr>
+										<th colspan="2">SHIPPER</th>
+										<th colspan="2">CONSIGNEE</th>
+									</tr>
+									<tr>
+										<td colspan="2">-</td>
+										<td colspan="2">-</td>
+									</tr>
+									<tr>
+										<th>Custom Declaration no</th>
+										<th>Bayan no</th>
+										<th>Final Bayan date</th>
+										<th>BL No/MAWB No</th>
+									</tr>
+									<tr>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
+								</table>
+								<table width="100%">
+									<tr>
+										<th>COMMODITY</th>
+										<th>VOLUME</th>
+										<th>DT. OF SHIPMENT</th>
+										<th>DT. OF ARRIVAL</th>
+										<th>DT. OF DELIVERY</th>
+									</tr>
+									<tr>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+										<td>-</td>
+									</tr>
+								</table>
+								<table width="100%" class="table-one">
+									<tr>
+										<th>DESCRIPTION</th>
+										<th>QTY</th>
+										<th>UNIT PRICE</th>
+										<th>LUMP SUM AMOUNT</th>
+									</tr>
+									<tr>
+										<td>Custom duty</td>
+										<td>1</td>
+										<td>SAR 0</td>
+										<td>SAR 0</td>
+									</tr>
+									<tr>
+										<td>Cont(</td>
+										<td>1</td>
+										<td>SAR 0</td>
+										<td>SAR 0</td>
+									</tr>
+								</table>
+								<table style=" width:100%; float: left;">
+									<tr>
+										<td>Amount in Words </td>
+										<td>SAR Only</td>
+										<td rowspan="4" style="font-weight:bold;">Approved By:</td>
+										<td rowspan="4">Khader Shiraz</td>
+									</tr>
+									<tr>
+										<td>Prepaid By</td>
+										<td>Abubeida Elsir</td>
+									</tr>
+									<tr>
+										<td>Checked By:</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Due Date:</td>
+										<td>IMMEDIATd</td>
+									</tr>
+								</table>
+								<br class="clearfloat"/>
+								<div class="heading" style="border: 2px solid;border-color:#b4b4b4; width: 30%;margin-right: 23px;">
+									<p>Name:...................</p>
+									<p>Date:...................</p>
+									<p>Reciever,s Sign &amp;Stamp</p>
+								</div>
+								<div class="heading" style="width: 20%;">
+									<p>UNLESS WRITTEN RECEIVED WITHIN 10</p>
+								</div>
+									
+								<div class="heading" style="border: 2px solid;border-color:#b4b4b4; width: 47%; float : right">
+								<p>White Customer Pink Account Yellow Master file</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</t>
+			</t>
+		</t>
+	</template>
+</data>
+</openerp>
+					

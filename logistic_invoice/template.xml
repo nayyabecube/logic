@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <report
+            id="logistic_invoice" 
+            model="account.invoice"
+            name="logistic_invoice.logistic_invoice1"
+            file="logistic_invoice.logistic_invoice1"
+            report_type="qweb-html"
+            string="Logistic Invoice"/> 
+    </data>
+</openerp>

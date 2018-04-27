@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <report
+            id="report_for_module_receipt_logic" 
+            model="customer.payment.bcube"
+            name="receipt_voucher_logic.module_report"
+            file="receipt_voucher_logic.module_report"
+            report_type="qweb-html"
+            string="Receipt Voucher"/> 
+    </data>
+</openerp>

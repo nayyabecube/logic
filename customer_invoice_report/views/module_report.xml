@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <data>
+
+        <template id="module_report">
+
+            <t t-call="report.html_container">
+                <t t-call="report.external_layout">
+                    <div class="page">
+
+                        <style>
+
+                            .body {
+                            width: 1080px;
+                            margin: 0px auto;
+                            margin-top: 100px;
+                            }
+
+                            .head {
+                            text-align: center;
+                            font-size: 20px;
+                            font-weight: bold;
+                            }
+
+                            .solid {
+                            font-weight: bold;
+                            }
+
+
+                            table,td,th {
+                            border: 1px solid black;
+                            border-collapse: collapse;
+                            text-align: center;
+                            }
+
+                            .stat {
+                            text-align: right;
+                            margin-bottom: 40px;
+                            margin-top: -70px;
+                            }
+
+                        </style>
+
+                        <div class="body">
+
+                            <p class="head">
+                                Detailed Statement on the Invoices For <span t-esc="by_customer"/> Transactions
+                            </p>
+
+                            <p>
+                                <span class="solid"> CUSTOMER NAME:</span>
+                                <span class="liquid" t-esc="customer"/>
+                            </p>
+
+                            <p>
+                                <span class="solid"> CUSTOMER ID NO:</span>
+                                <span class="liquid" t-esc="customer_id"/>
+                            </p>
+
+                            <div  class="stat">
+
+                                <p>
+                                    <span class="solid">STATEMENT NO:</span>
+                                    <span class="liquid">Add Report Number</span>
+                                </p>
+
+                                <p>
+                                    <span class="solid">STATEMENT DATE:</span>
+                                    <span class="liquid" t-esc="date"/>
+                                </p>
+
+                            </div>
+
+                            <table style="width:100%">
+
+                                <tr>
+                                    <th>Job no.</th>
+                                    <th>Invoice no.</th>
+                                    <th>Invoice Date</th>
+                                    <th>Customer REF</th>
+                                    <th>Bayan no.</th>
+                                    <th>B/L no.</th>
+                                    <th>Terminal Cost</th>
+                                    <th>Custom Clearance Charges</th>
+                                    <th>Custom Duty</th>
+                                    <th>Other Charges</th>
+                                    <th>VAT 5%</th>
+                                    <th>Total of the Invoices</th>
+                                </tr>
+                                <t t-set = "terminal_cost" t-value = "0" />
+                                <t t-set = "clearance_cost" t-value = "0" />
+                                <t t-set = "duty_cost" t-value = "0" />
+                                <t t-set = "vat_cost" t-value = "0" />
+                                <t t-set = "total_cost" t-value = "0" />
+                                <t t-set = "other_charges" t-value = "0" />
+                                <t t-foreach="rec" t-as="o">
+                                    <tr>
+                                        <td>
+                                            <span t-esc="o.our_job"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.number"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.date_invoice"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.customer_ref"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.bayan_no"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="o.bill_num"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:0,}'.format(float(get_terminal_cost(o.id)))"/>
+                                            <t t-set = "terminal_cost" t-value = "terminal_cost + get_terminal_cost(o.id)" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:0,}'.format(float(get_custom_cost(o.id)))"/>
+                                            <t t-set = "clearance_cost" t-value = "clearance_cost + get_custom_cost(o.id)" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:0,}'.format(float(get_duty_cost(o.id)))"/>
+                                            <t t-set = "duty_cost" t-value = "duty_cost + get_duty_cost(o.id)" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:0,}'.format(float(get_other_charges(o.id)))"/>
+                                            <t t-set = "other_charges" t-value = "other_charges + get_other_charges(o.id)" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:0,}'.format(float(o.amount_tax))"/>
+                                            <t t-set = "vat_cost" t-value = "vat_cost + o.amount_tax" />
+                                        </td>
+                                        <td>
+                                            <span t-esc="'{:0,}'.format(float(o.amount_total))"/>
+                                            <t t-set = "total_cost" t-value = "total_cost + o.amount_total" />
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr style="font-weight:bold;height:30px">
+                                    <td colspan="6">Total</td>
+                                    <td>
+                                        <span t-esc="'{:0,}'.format(float(terminal_cost))"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="'{:0,}'.format(float(clearance_cost))"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="'{:0,}'.format(float(duty_cost))"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="'{:0,}'.format(float(other_charges))"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="'{:0,}'.format(float(vat_cost))"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="'{:0,}'.format(float(total_cost))"/>
+                                    </td>
+                                </tr>
+
+                                <tr style="font-weight:bold;height:30px">
+                                    <td colspan="12">
+                                        <span class="solid" t-esc="number_to_spell(total_cost)"/>
+                                    </td>
+                                </tr>
+
+                                <tr style="font-weight:bold;height:100px">
+
+                                    <td>Prepared By: </td>
+                                    <td colspan="5">
+                                        <span class="solid" t-esc="getname()" />
+                                    </td>
+                                    <td>Approved By: </td>
+                                    <td colspan="6"/>
+                                </tr>
+
+                            </table>
+
+                        </div>
+
+
+                    </div>
+
+                    <!-- </t> -->
+
+                </t>
+            </t>
+
+        </template>
+
+    </data>
+
+</openerp>

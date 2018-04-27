@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<template id="assets_backend" name="custom assets" inherit_id="web.assets_backend"> 
+		<xpath expr="." position="inside">
+			<link rel="stylesheet" href="/custom_logistic/static/src/css/styles.css"/>
+		</xpath> 
+	</template>
+
+	<record id="report_form_view"   model="ir.ui.view"> 
+		<field name="name">report_form_view</field> 
+		<field name="model">xl.report</field> 
+		<field name="arch" type="xml">
+			<form>
+				<header>
+					<button name="print_report" type="object" string="Download Report" class="oe_highlight"/>
+				</header>
+				<sheet>
+					<group name="top">  
+						<group name="left">
+						   <field name="ttype"/>
+						   <field name="site" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+						   <field name="customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+                        	<field name="b_name"  domain="[('customer.id','=',customer)]" options="{'no_quick_create': True, 'no_create_edit' : True}"/>
+					    </group>
+					    <group name="right">
+						   <field name="total"/>
+						   <field name="s_date" attrs="{'invisible':[('total','=',True)]}"/>
+						   <field name="e_date" attrs="{'invisible':[('total','=',True)]}"/>
+					    </group>
+					</group>
+				</sheet>
+			</form>
+		</field> 
+	</record>
+
+	<record id="report_tree_view" model="ir.ui.view"> 
+      <field name="name">report_tree_view</field> 
+      <field name="model">xl.report</field> 
+      <field name="type">tree</field> 
+      <field name="arch" type="xml"> 
+      <tree> 
+        <field name="customer"/>
+        <field name="s_date"/>
+        <field name="e_date"/>
+        <field name="ttype"/>
+        <field name="total"/>
+      </tree> 
+      </field> 
+    </record>
+
+	<act_window id="report_act_id" 
+    name="SHIPMENT STATUS REPORT" 
+    res_model="xl.report" 
+    view_mode="tree,form" />
+
+	<menuitem id="report_menu_id" name="Shipment Status Report" parent="sales_team.menu_sale_report" action="report_act_id" sequence=""/>
+
+</odoo>

@@ -1,0 +1,345 @@
+<?xml version="1.0"?>
+<odoo>
+
+	<template id="assets_backend" name="custom assets" inherit_id="web.assets_backend"> 
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/custom_logistic/static/src/css/styles.css"/>
+        </xpath> 
+    </template>
+
+
+		<record id="suppl_form_view"   model="ir.ui.view"> 
+				<field name="name">suppl_form_view</field> 
+				<field name="model">res.partner</field> 
+				<field name="inherit_id" ref="base.view_partner_form"/> 
+				<field name="arch" type="xml">
+
+						<xpath expr="//field[@name='category_id']" position="after">
+
+							<field name="brooker" />
+							<field name="bl_num" invisible="1"/>
+							<field name="cont_num" invisible="1"/>
+							<field name="bill_type" />
+							<field name="checks" invisible="1"/>
+							
+						</xpath>
+
+
+						<xpath expr="//field[@name='name']" position="after">
+
+							<field name="types" attrs="{'invisible':[('customer','!=',False)]}"/>
+							
+						</xpath>
+						
+						<xpath expr="//page[@name='sales_purchases']" position="before">
+
+							<page string="B/L Number" attrs="{'invisible':['|',('bl_num','=',False),('customer','=',False)]}">
+
+								<field name="bl_id" nolabel='1'>
+									<tree editable="bottom">
+										
+										<field name="charges_serv"/>
+										<field name="charges_type"/>
+										<field name="by_customer" domain="[('customer.id','=',parent.id)]"/>
+
+									</tree>
+								</field> 
+
+							</page>
+
+
+						</xpath>
+
+						<xpath expr="//page[@name='sales_purchases']" position="before">
+
+							<page string="Container Wise" attrs="{'invisible':['|',('cont_num','=',False),('customer','=',False)]}">
+								
+
+								<field name="cont_id" nolabel='1'>
+									<tree editable="bottom">
+										
+										<field name="charges_serv"/>
+										<field name="charges_type"/>
+										<field name="service_type"/>
+										<field name="cont_type"/>
+										<field name="by_customer" domain="[('customer.id','=',parent.id)]"/>
+
+									</tree>
+								</field> 
+
+							</page>
+							
+						</xpath>
+
+						<xpath expr="//page[@name='sales_purchases']" position="before">
+
+								<page string="Route Management" attrs="{'invisible':[('checks','=',True)]}">
+										
+									<field name="route_id" nolabel='1'>
+											<tree editable="bottom">
+												
+												<field name="form"/>
+												<field name="to"/>
+												<field name="fleet_type"/>
+												<field name="service_type"/>
+												<field name="trans_charges"/>
+												<field name="by_customer" domain="[('customer.id','=',parent.id)]"/>
+
+											</tree>
+									</field>                    
+										
+								</page>
+
+						</xpath>
+
+						<xpath expr="//page[@name='sales_purchases']" position="before">
+
+								<page string="Charges" attrs="{'invisible':['|',('types','!=','freight_fwd'),('customer','!=',False)]}">
+										
+										<field name="charge_id" nolabel='1'>
+												<tree editable="bottom">
+													
+													
+													<field name="contain_type"/>
+													<field name="charges_vend"/>
+
+												</tree>
+
+										</field>                    
+										
+								</page>
+								
+
+						</xpath>
+
+						<xpath expr="//page[@name='sales_purchases']" position="after">
+							<page string="By Customers">
+
+								<field name="by_customer" nolabel='1'>
+										<tree>
+
+											<field name="name"/>
+											<field name="customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/>
+
+										</tree>
+
+								</field>
+
+							</page>
+
+						</xpath>
+
+				</field> 
+		</record>
+
+	<record id="by_customer_from" model="ir.ui.view">
+	    <field name="name">by_customer_from</field>
+	    <field name="model">by.customer</field>
+	    <field name="arch" type="xml">
+	        <form string="By Customer">
+	            <sheet>
+	                <group>
+	                    <field name="name"/>
+	                    <field name="customer"/>
+	                </group>
+	            </sheet>
+	        </form>
+	    </field>
+	</record>
+
+		<record id="account_form_view"   model="ir.ui.view"> 
+
+			<field name="name">account_form_view</field> 
+			<field name="model">account.invoice</field> 
+			<field name="inherit_id" ref="account.invoice_form"/> 
+			<field name="arch" type="xml">
+
+				<xpath expr="//field[@name='partner_id']" position="after">
+
+					<field name="by_customer" />
+					<field name="billng_type" />
+					
+				</xpath>
+
+				<xpath expr="//field[@name='payment_term_id']" position="after">
+
+					<field name="bill_num" />
+					<field name="acount_link" invisible='1'/>
+
+					
+				</xpath>
+
+				<xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_unit']" position="after">
+
+					<field name="crt_no"/>
+					<field name="service_type"/>
+
+				</xpath>
+
+				<xpath expr="//button[@name='%(account.action_account_invoice_payment)d']" position="replace">
+                    <button name="reg_pay" type="object" string="Register Payment" class="oe_highlight" attrs="{'invisible':[('state','not in','open')]}"/>
+                </xpath>
+
+                <!-- <xpath expr="//header/button[@name='%(sale.action_view_sale_advance_payment_inv)d']" position="attributes">
+    				<attribute name="invisible">1</attribute> 
+				</xpath>
+ -->
+			</field>
+
+		</record>
+
+		<record id="bc" model="ir.actions.act_window">
+			<field name="domain">[('trans_link', '=', active_id)]</field>
+			<field name="name">Sale Order</field>
+			<field name="res_model">sale.order</field>
+			<field name="view_id" ref="sale.view_order_tree" />
+		</record>
+
+		<record id="view_form_freight" model="ir.ui.view"> 
+			<field name="name">Freight Form</field> 
+			<field name="model">freight.forward</field> 
+			<field name="arch" type="xml"> 
+				<form> 
+
+						<header>
+
+								<field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+
+								<field name="btn_stage" widget="statusbar" statusbar_visible="trans,custom,invoice,done" invisible="1"/>
+
+								<button name="create_order" type="object" string="Create Transport Order" class="oe_highlight" attrs="{'invisible':[('btn_stage','not in','trans')]}"/>
+
+								<button name="create_custm" string="Create Custom Clearence" type="object" class="oe_highlight" attrs="{'invisible':[('btn_stage','not in','custom')]}"/>
+
+								<button name="create_invoice" string="Create Invoice" type="object" class="oe_highlight" attrs="{'invisible':[('btn_stage','not in','invoice')]}"/>
+
+								<button name="done" type="object" string="Done" class="oe_highlight" attrs="{'invisible':[('btn_stage','not in','done')]}"/>			
+
+						</header>
+
+
+					<sheet>
+
+						<button name="%(bc)d" type="action" class="oe_stat_button trans" icon="fa-truck" help="show all the costs for this vehicle" attrs="{'invisible':[('smart','!=',True)]}"> 
+						<field name="recharge_count" widget="statinfo" string="Transport Order"/>
+						</button>
+
+						<group >
+
+							<group string="">
+
+								<field name="sr_no"/>
+								<field name="smart" invisible="1"/>
+								<field name="types"/>
+								<field name="s_supplier" domain="[('types','=','ship_line'),('supplier','=',True)]" context="{'default_supplier':True,'default_customer':False,'default_types':'ship_line'}"/>
+								<field name="customer" domain="[('parent_id','=',False),('supplier','=',False),('customer','=',True)]"/> 
+								<field name="eta_date"/>
+								<field name="etd_date"/>						
+								<field name="customer_site"/>
+
+							</group>
+
+							
+
+							<group string=" ">
+
+								<field name="book_date">%d%m%Y</field>
+								<field name="no_of_con" invisible="1"/>
+								<field name="form"/>
+								<field name="to"/>
+								<field name="cro"/>
+								<field name="cro_date"/>
+								<!-- <field name="sale_link"/> -->
+								<field name="acct_link"/>
+								<field name="implink" attrs="{'invisible':[('types','!=','imp')]}"/>
+								<field name="explink" attrs="{'invisible':[('types','!=','exp')]}"/>
+								
+							</group>
+
+							<group string="Services">
+
+								<field name="freight"/>
+								<field name="trans"/>                
+
+							</group>
+
+							<group string=".">
+
+								<field name="store"/>
+								<field name="custm"/>               
+								<field name="inv_chk" invisible='1'/>               
+
+							</group>
+
+							<group string="Container Info.">
+							</group>
+
+							<field name="frieght_id" nolabel='1'>
+								<tree editable="bottom">
+									<field name="cont_no"/>
+									<field name="cont_type"/>
+									<field name="str_charg"/>
+									<field name="frt_charg"/>
+									<field name="str_supp" domain="[('supplier','=',True),('types','=','storage')]" context="{'default_supplier':True,'default_customer':False,'default_types':'storage'}"/>
+								</tree>
+							</field>
+
+							<group>
+								<field name="status"/>
+							</group>
+
+						</group>
+
+					</sheet>
+
+				</form>
+
+			</field>
+
+		</record>
+
+	
+
+		<record id="view_tree_rates" model="ir.ui.view"> 
+			<field name="name">Rates Form</field> 
+			<field name="model">freight.forward</field> 
+			<field name="type">tree</field> 
+			<field name="arch" type="xml"> 
+			<tree> 
+			 
+						<field name="customer"/>
+						<field name="s_supplier"/>
+ 
+
+
+			</tree> 
+			</field> 
+			
+		</record>
+
+		<record id="freight_logics" model="ir.sequence">
+			<field name="name">freight_logics</field>
+			<field name="code">freight.forward</field>
+			<field name="prefix">S</field>
+			<field name="padding">4</field>
+		</record>
+
+
+		<record model="ir.actions.act_window" id="freight_action">
+			<field name="name">Freight Forwarding</field>
+			<field name="res_model">freight.forward</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+
+		<menuitem id="logic_project" name="Project" parent="sales_team.menu_base_partner" sequence="12"/>
+
+		<menuitem name="Project" id="freight_menu_item" parent="logic_project" action="freight_action" sequence="1"/>
+
+
+
+
+		
+		
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <report
+                id="logistic_inv"
+                model="account.invoice"
+                name="logistic_vision.logistic_invoice"
+                file="logistic_vision.logistic_invoice"
+                report_type="qweb-html"
+                string="Logistic Invoice"
+                menu="True"/>
+        <!--<record id="dc_button" model="ir.ui.view">-->
+            <!--<field name="name">dc_button</field>-->
+            <!--<field name="model">export.logic</field>-->
+            <!--<field name="inherit_id" ref="custom_logistic.view_form_export"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<header>-->
+                    <!--<xpath expr="//button[@name='create_custom_charges']" position="after">-->
+                        <!--<button name="%(logistic_inv)d" string="Print Invoice" type="action" class="btn-primary" attrs="{'invisible': [('state', 'not in','done')]}" />-->
+                    <!--</xpath>-->
+                <!--</header>-->
+            <!--</field>-->
+        <!--</record>-->
+
+
+    </data>
+
+
+</openerp>

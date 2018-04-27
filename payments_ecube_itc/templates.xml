@@ -1,0 +1,235 @@
+<?xml version="1.0"?> 
+<openerp> 
+  <data>
+  
+    <record id="view_form_customer_payments" model="ir.ui.view"> 
+        <field name="name">Customer Payments</field> 
+        <field name="model">customer.payment.bcube</field> 
+        <field name="arch" type="xml"> 
+          <form string="Customer Payments"> 
+            <header> 
+                <button name="create_journal_entry" type="object" 
+                    string="Validate" class="oe_highlight"  attrs="{'invisible':[('state','=','post')]}"/> 
+                <button name="cancel_voucher_bcube" type="object"
+                    string="Cancel Receipt"  attrs="{'invisible':[('state','=','draft')]}"/> 
+
+              <field name="state" widget="statusbar" statusbar_visible="draft,post"/>
+               
+
+            </header> 
+            <sheet>
+                <group name= "group_top"  >
+                    <group  name="group_left">
+                      <field name="number" readonly = "True"/>
+                        <field name="partner_id" attrs="{'readonly':[('state','=','post')]}"/>
+                        <field name="sales_man_id" attrs="{'readonly':[('state','=','post')]}"/>
+                        <field name="sales_man_commission" attrs="{'readonly':[('state','=','post')]}"/>
+                        <field name="amount" attrs="{'readonly':[('state','=','post')]}" />
+                        <field name="adjustable" invisible = "1" />
+                        <!-- <field name="e_amount" /> -->
+                        <!-- <field name="t_amount" /> -->
+                        <field name="invoice_link" invisible="1"/>
+                        <field name="journal_id" attrs="{'readonly':[('state','=','post')]}" domain="[('type', 'in', ['cash','bank'])]"/>
+                        <field name="account_id" attrs="{'readonly':[('state','=','post')]}" domain="[('bank', '=', True)]"/>
+                        <!-- <field name="taxes" widget="many2many_tags" attrs="{'readonly':[('state','=','post')]}" domain="[('with_holding', '=', True)]" /> -->
+
+                    </group>
+                    <group  name="group_right">
+                        <field name="date" attrs="{'readonly':[('state','=','post')]}"/>
+                        <!-- <field name="period_id" attrs="{'readonly':[('state','=','post')]}"/>  -->
+                        <field name="reference"  placeholder="e.g. 003/10" attrs="{'readonly':[('state','=','post')]}"/> 
+                        <field name="name"  placeholder="e.g. invoice SAJ/0042" attrs="{'readonly':[('state','=','post')]}"/>
+                        <field name="journal_entry_id"  readonly = "True"/>   
+                        <field name="receipts"  invisible="1"/>  
+                        <!-- <field name="active_user" />  -->
+                    </group>
+                </group>
+
+                <!-- <notebook> -->
+                <!-- <page string="Open Invoices">  
+
+                <field name="customer_tree" attrs="{'readonly':[('state','=','post')]}">
+                  <tree editable="bottom">
+                    
+                    <field name="invoice_id" readonly = "True"/>
+                    <field name="date" readonly = "True"/>
+                    <field name="due_amount" readonly = "True"/>
+                    <field name="reconciled_amount"/>
+                    <field name= "reconcile" readonly = "True"/>
+                    
+                  </tree>
+                </field>
+
+                 <group class="oe_subtotal_footer oe_right">
+                  <field name="total" class="oe_subtotal_footer_separator"/>
+                </group>    
+
+            
+
+                </page> -->
+                
+                  <!-- <page string="Tax Deduction">
+                  <field name="tax_link" attrs="{'readonly':[('state','=','post')]}">
+                  <tree editable="bottom">
+                    
+                    <field name="name"/>
+                    <field name="account_id"/>
+                    <field name="amount"/>
+                    
+                  </tree>
+                </field>
+                 <group class="oe_subtotal_footer oe_right">
+                  <field name="t_total" class="oe_subtotal_footer_separator"/>
+                </group>   
+      
+                  </page> -->
+
+           <!-- </notebook> -->
+               
+            </sheet>
+          </form> 
+        </field> 
+    </record>
+
+
+    <record id="invoice_payment_extension" model="ir.ui.view"> 
+        <field name="name">invoice_payment_extension</field> 
+        <field name="model">account.invoice</field> 
+        <field name="inherit_id" ref="account.invoice_form"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='other_info']" position="before">
+                <page string="Payments" name="payments">
+                    <field name="payments" nolabel="1">
+                        <tree string="Payments" >
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="invoice_id"/>
+                            <field name="payment_id"/>
+                            
+
+
+
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+          </field>
+      </record>
+
+
+    <record id="invoice_vender_extension" model="ir.ui.view"> 
+        <field name="name">invoice_vender_extension</field> 
+        <field name="model">account.invoice</field> 
+        <field name="inherit_id" ref="account.invoice_supplier_form"/> 
+        <field name="arch" type="xml">
+            <xpath expr="//page[2]" position="before">
+                <page string="Payments" name="payments">
+                    <field name="payments" nolabel="1">
+                        <tree string="Payments" >
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="invoice_id"/>
+                            <field name="payment_id"/>
+                            
+
+
+
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+      </record>
+           <!--  <xpath expr="//field[@name='reconciled']" position="replace">
+                
+                    <field name="reconciled"/>
+                
+            </xpath> -->
+
+    <record model="ir.sequence" id="customer_receipts_sequence">
+      <field name="name">Customer Receipts</field>
+      <field name="code">customer.payment.bcube</field>
+      <field name="prefix">CR</field>
+      <field name="padding">4</field>
+    </record>
+
+    <record model="ir.sequence" id="supplier_payments_sequence">
+      <field name="name">Supplier Payments</field>
+      <field name="code">supplier.payment.bcube</field>
+      <field name="prefix">SP</field>
+      <field name="padding">4</field>
+    </record>
+
+    <record id="account_tax_xpath" model="ir.ui.view"> 
+        <field name="name">account_tax_xpath</field> 
+        <field name="model">account.tax</field> 
+        <field name="inherit_id" ref="account.view_tax_form"/> 
+        <field name="arch" type="xml"> 
+
+           <xpath expr="//field[@name='active']" position="after">
+                       <field name="with_holding"/>
+                       <field name="wh_type"/>
+                   </xpath>
+        </field> 
+    </record>
+
+    <record id="account_account_extension" model="ir.ui.view"> 
+        <field name="name">account_account_extension</field> 
+        <field name="model">account.account</field> 
+        <field name="inherit_id" ref="account.view_account_form"/> 
+        <field name="arch" type="xml"> 
+
+           <xpath expr="//field[@name='deprecated']" position="after">
+                       <field name="bank"/>
+                   </xpath>
+        </field> 
+    </record>
+
+    <record id="main_customer_tree" model="ir.ui.view"> 
+      <field name="name">Customer Payments</field> 
+      <field name="model">customer.payment.bcube</field> 
+      <field name="arch" type="xml"> 
+        <tree > 
+          <field name="partner_id"/> 
+          <field name="number"/> 
+          <field name="journal_id"/>
+          <field name="reference"/>
+          <field name="amount" sum = "Total"/>
+          <field name="state"/>
+
+        </tree> 
+      </field> 
+    </record> 
+
+    <record model="ir.actions.act_window" id="new_action_customer_payments">
+        <field name="name">Customer Payments</field>
+        <field name="res_model">customer.payment.bcube</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain" >[('receipts', '=',True)]</field>
+      <field name="context" eval="{'default_receipts': 1}"/> 
+    </record>
+
+    <record model="ir.actions.act_window" id="new_action_supplier_payments">
+        <field name="name">Supplier Payments</field>
+        <field name="res_model">customer.payment.bcube</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain" >[('receipts', '=',False)]</field>
+      <field name="context" eval="{'default_receipts': 0}"/> 
+    </record>
+
+    <menuitem id="sub_menu_customer_payments" 
+       name="Receipts" 
+       action="new_action_customer_payments" 
+       parent="account.menu_finance_receivables"/> 
+
+    <menuitem id="sub_menu_supplier_payments" 
+       name="Payments" 
+       action="new_action_supplier_payments" 
+       parent="account.menu_finance_payables"/> 
+
+  </data>
+</openerp> 

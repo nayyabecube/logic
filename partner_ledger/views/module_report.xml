@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+
+    <data>   
+
+        <template id="partner_ledger_2_report">
+
+            <t t-call="report.html_container">
+
+                <t t-call="report.external_layout">
+
+                    <t t-foreach="docs" t-as="o">
+                
+                        <div class="page">
+
+                            <style type="text/css">
+                                .header,
+                                .footer {
+                                    display: none;
+                                }
+                                .clearfloat {
+                                    clear: both;
+                                    float: none;
+                                    width: 100%;
+                                    height: 1px;
+                                    display: block;
+                                }
+                                .report-wrapper {
+                                    width: 1000px;
+                                    margin: 0px auto;
+                                }
+                                table {
+                                    width: 100%;
+                                    border-spacing: 0px;
+                                    border: 2px solid #CCC;
+                                }
+                                table tr td, table tr th {
+                                    text-align: center;
+                                    padding: 10px 0px 10px 5px;
+                                    min-width: 130px;
+                                    border-right: 2px solid #CCC;
+                                    border-bottom: 1px solid #eee;
+                                }
+                                table tr td:last-child, 
+                                table tr th:last-child {
+                                    border-right: none
+                                }
+                                table tr:last-child td {
+                                    border-bottom: none
+                                }
+                                table tr th {
+                                    text-align: center;
+                                }
+                                .report-header {
+                                    width: 100%;
+                                    margin: 40px -58px -13px;
+                                    text-align: left;
+                                }
+                                .report-header p {
+                                    width: 50%;
+                                    float: left;
+                                    margin: 0px 95px 0px;
+                                }
+                                .report-header p .solid {
+                                    font-weight: bold;
+
+                                }
+                                h2 {
+                                    text-align: center;
+                                    font-size: 35px;
+                                    text-decoration: underline; 
+                                }
+                                .tile {
+                                    display: inline-block;
+                                    width: 100px;
+                                    text-align: center;
+                                    background: #a64f8e;
+                                    color: #fff;
+                                    padding: 2px 5px;
+                                }
+                                .name {
+                                    font-weight: bold;
+                                    text-align: center;
+                                    font-size: 20px;
+                                    margin-left: -42px;
+                                }
+                                img {
+                                    width: 30%;
+                                    height: 80px;
+                                }
+                                h1 {
+                                    text-align: center;
+                                    width: 100%;
+                                    display: inline-block;
+                                }
+                                .main_box {
+                                    width: 100%;
+                                    float: left;
+                                }
+                                .date {
+                                    width: 20%;
+                                    text-align: right;
+                                    margin-top: 0px;
+                                    float: left;
+                                    margin-top: 23px;
+                                }
+                                .center_head {
+                                    width: 50%;
+                                    margin: 0px auto;
+                                    float: left;
+                        
+                                }
+                                .ledger {
+                                    width: 20%;
+                                    margin: 0px auto;
+                                    float: left;
+                                    margin-top: 35px;
+                                }
+                            </style>
+
+                            <div class="report-wrapper">
+                                    
+                                <div class="report-header">
+
+                                        <center>
+                                            <img src="/partner_ledger/static/src/img/logo.png" alt="logo" />
+                                        </center>
+                                        <br class="clearfloat"/>
+
+                                            <!-- <span class="solid">Partner: </span> -->
+                                </div>
+                                    <div class="main_box">
+
+                                        <div class="ledger"> 
+                                            <span class="tile"><span t-esc="typing()"></span> Ledger</span>
+                                        </div>
+                                  
+                                        <div class="center_head">
+                                            <h1>Statement of Accounts</h1>
+
+                                            <p class="name">
+                                                <span class="liquid" t-esc="partner_wiz.name"></span>
+                                            </p>
+                                        </div>
+
+                                        <div class="date">
+                                            <p style="float:none; width: 100%;">
+                                                <span class="solid"><b> From:</b> </span>
+                                                <span class="liquid" t-esc="form"></span>
+                                            </p>
+
+                                            <p style="float:none; width: 100%;">
+                                                <span class="solid"><b> To:</b> </span>
+                                                <span class="liquid" t-esc="to"></span>
+                                            </p>
+                                        </div>
+
+                                    </div>
+                                <t t-set="balance" t-value="opening_bal" />
+                                <table>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Description</th>
+                                        <th>Debit</th>
+                                        <th>Credit</th>
+                                        <th>Balance</th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="6" style="background: #CCC; text-align: center; padding: 10px 0px; border-top: 1px solid #000;">
+                                            <b>
+                                                <span class="solid">Opening Balance: </span>
+                                                <span class="liquid" t-esc="'{:0,}'.format(int(float(balance)))"></span>
+                                            </b>
+                                        </td>
+                                    </tr>
+
+                                    <t t-foreach="entries.sorted(key=lambda x: x.date)" t-as="data">
+                                        <tr>
+                                            <td><span t-esc="time.strftime('%d %b %Y',time.strptime(data.date,'%Y-%m-%d'))"></span></td>
+
+                                            <td><span t-esc="data.journal_id.name"></span></td>
+
+                                            <td><span t-esc="data.name"></span></td>
+
+                                            <td><span t-esc="'{:0,}'.format(int(float(data.debit)))"></span></td>
+
+                                            <td><span t-esc="'{:0,}'.format(int(float(data.credit)))"></span></td>
+
+                                            <td>
+                                                <span t-esc="'{:0,}'.format(int(float((balance + data.debit) - data.credit)))"></span>
+                                                <t t-set="balance" t-value="(balance + data.debit) - data.credit" />
+
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+
+                            </div><!--end of report wrapper-->
+
+                        </div><!--end of page -->
+
+                    </t>
+
+                </t>
+                
+            </t>
+
+        </template>
+
+    </data>
+
+</openerp>
